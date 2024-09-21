@@ -7,7 +7,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 class VehicleViewSet(viewsets.ModelViewSet):
     """
@@ -15,7 +15,7 @@ class VehicleViewSet(viewsets.ModelViewSet):
     """
     queryset = Vehicle.objects.all()  # Define the queryset for the viewset
     serializer_class = VehicleSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Ensure the user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         """
@@ -30,7 +30,7 @@ class RideViewSet(viewsets.ModelViewSet):
     """
     queryset = Ride.objects.all()
     serializer_class = RideSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Ensure the user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         """
