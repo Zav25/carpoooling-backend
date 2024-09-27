@@ -15,28 +15,27 @@ class VehicleViewSet(viewsets.ModelViewSet):
     """
     queryset = Vehicle.objects.all()  # Define the queryset for the viewset
     serializer_class = VehicleSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]  # Commented out to disable authentication
 
     def perform_create(self, serializer):
         """
-        Automatically set the owner to the current logged-in user when creating a vehicle.
+        Allow owner to be set manually through the request data.
         """
-        serializer.save(owner=self.request.user)
+        # No need to set owner from request.user
+        serializer.save()
 
 class RideViewSet(viewsets.ModelViewSet):
     """
     This viewset provides `list`, `create`, `retrieve`, `update`, and `destroy` actions.
-    The logged-in user is set as the driver when creating a ride.
     """
     queryset = Ride.objects.all()
     serializer_class = RideSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]  # Uncomment if authentication is required
 
     def perform_create(self, serializer):
-        """
-        Automatically set the driver to the current logged-in user when creating a ride.
-        """
-        serializer.save(driver=self.request.user)
+        # Just call save, no additional driver assignment
+        serializer.save()
+
 
 
 

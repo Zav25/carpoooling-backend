@@ -36,31 +36,32 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
     
 class VehicleSerializer(serializers.ModelSerializer):
+    # Override the owner field to show only users who are drivers
+    owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(is_driver=True))
+
     class Meta:
         model = Vehicle
-        # Include all fields of the Vehicle model
         fields = ['id', 'owner', 'license_plate', 'model', 'capacity']
-        # Make sure 'owner' is read-only, as it's set when the vehicle is created
-        extra_kwargs = {
-            'owner': {'read_only': True}
-        }
 
     def create(self, validated_data):
         """
-        Overriding create method to automatically set the vehicle's owner
+        Override the create method to handle vehicle creation.
         """
-        # 'owner' should be passed from the request context (e.g., the logged-in user)
-        request = self.context.get('request')
-        owner = request.user
-        vehicle = Vehicle.objects.create(owner=owner, **validated_data)
+        vehicle = Vehicle.objects.create(**validated_data)
         return vehicle
 
 class RideSerializer(serializers.ModelSerializer):
-    driver = serializers.ReadOnlyField(source='driver.username')  # Read-only driver username
+    # Filter drivers for the 'driver' field (users who have is_driver=True)
+    driver = serializers.SlugRelatedField(
+        queryset=User.objects.filter(is_driver=True),  # Only users who are drivers
+        slug_field='username',
+        required=True  # Make this required for ride creation
+    )
+
+    # Filter passengers for the 'passenger' field (users who have is_driver=False)
     passenger = serializers.SlugRelatedField(
-        queryset=User.objects.all(), 
-        slug_field='username', 
-        required=False  # Make this optional for ride creation
+        queryset=User.objects.filter(is_driver=False),  # Only users who are not drivers
+        slug_field='username',
     )
 
     class Meta:
@@ -68,5 +69,6 @@ class RideSerializer(serializers.ModelSerializer):
         fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'start_time', 'end_time', 'price']
 
     def create(self, validated_data):
-        ride = Ride.objects.create(driver=self.context['request'].user, **validated_data)
+        # Just use the driver from validated_data
+        ride = Ride.objects.create(**validated_data)  # driver is now included in validated_data
         return ride
