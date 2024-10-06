@@ -36,9 +36,6 @@ class RideViewSet(viewsets.ModelViewSet):
         # Just call save, no additional driver assignment
         serializer.save()
 
-
-
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
