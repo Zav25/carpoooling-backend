@@ -22,7 +22,6 @@ def home(request):
     return HttpResponse("Hello, the app is running!")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', home),  # Add this line to handle "/"
 ]
