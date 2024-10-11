@@ -8,3 +8,4 @@ psycopg==3.2.2
 PyJWT==2.9.0
 sqlparse==0.5.1
 typing_extensions==4.12.2
+django-cors-headers>=3.0.0
