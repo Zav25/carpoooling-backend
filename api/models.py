@@ -49,13 +49,14 @@ class Vehicle(models.Model):
     capacity = models.IntegerField(default=4)
 
 class Ride(models.Model):
-    driver = models.ForeignKey(User, related_name='driver_rides', on_delete=models.CASCADE)
+    driver = models.ForeignKey(User, related_name='driver_rides', null=True, on_delete=models.SET_NULL)
     passenger = models.ForeignKey(User, related_name='passenger_rides', null=True, blank=True, on_delete=models.SET_NULL)    
     origin = models.CharField(max_length=255, null=True)
     destination = models.CharField(max_length=255, null=True)
+    num_persons = models.PositiveIntegerField(null=True)  # Number of persons for the ride
     start_time = models.DateTimeField(null=True)  # Start time for the ride
     end_time = models.DateTimeField(null=True)  # End time for the ride
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True)  # Price of the ride
 
     def __str__(self):
-        return f'Ride from {self.origin} to {self.destination} by {self.driver.username}'
+        return f"Ride from {self.origin} to {self.destination} with {self.num_persons} persons"
