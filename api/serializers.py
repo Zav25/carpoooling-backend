@@ -66,7 +66,7 @@ class RideSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ride
-        fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'start_time', 'end_time', 'price']
+        fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'num_persons', 'start_time', 'end_time', 'price']
 
     def create(self, validated_data):
         # Just use the driver from validated_data
