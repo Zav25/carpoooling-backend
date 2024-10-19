@@ -62,13 +62,23 @@ class RideSerializer(serializers.ModelSerializer):
     passenger = serializers.SlugRelatedField(
         queryset=User.objects.filter(is_driver=False),  # Only users who are not drivers
         slug_field='username',
+        allow_null=True,  # Allow passenger to be null
+        required=False
     )
 
     class Meta:
         model = Ride
-        fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'num_persons', 'start_time', 'end_time', 'price']
+        fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'num_persons', 'start_time', 'end_time', 'price', 'status']
+        read_only_fields = ['status']  # Make 'status' read-only by default
 
     def create(self, validated_data):
-        # Just use the driver from validated_data
-        ride = Ride.objects.create(**validated_data)  # driver is now included in validated_data
+        # Use the driver from validated_data to create the ride
+        ride = Ride.objects.create(**validated_data)
         return ride
+
+    def to_representation(self, instance):
+        """ Customize the representation of the ride instance to include driver and passenger info """
+        representation = super().to_representation(instance)
+        representation['driver'] = instance.driver.username if instance.driver else None
+        representation['passenger'] = instance.passenger.username if instance.passenger else None
+        return representation
