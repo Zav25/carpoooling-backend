@@ -55,15 +55,15 @@ class RideSerializer(serializers.ModelSerializer):
     driver = serializers.SlugRelatedField(
         queryset=User.objects.filter(is_driver=True),  # Only users who are drivers
         slug_field='username',
-        required=True  # Make this required for ride creation
+        allow_null=True,  # Allow passenger to be null
+        required=False
     )
 
     # Filter passengers for the 'passenger' field (users who have is_driver=False)
     passenger = serializers.SlugRelatedField(
         queryset=User.objects.filter(is_driver=False),  # Only users who are not drivers
         slug_field='username',
-        allow_null=True,  # Allow passenger to be null
-        required=False
+        required=True
     )
 
     class Meta:
