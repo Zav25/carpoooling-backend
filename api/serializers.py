@@ -69,7 +69,6 @@ class RideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ride
         fields = ['id', 'driver', 'passenger', 'origin', 'destination', 'num_persons', 'start_time', 'end_time', 'price', 'status']
-        read_only_fields = ['status']  # Make 'status' read-only by default
 
     def create(self, validated_data):
         # Use the driver from validated_data to create the ride
