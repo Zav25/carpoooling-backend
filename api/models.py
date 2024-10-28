@@ -56,7 +56,7 @@ class Ride(models.Model):
         ('canceled', 'Canceled'),
     ]
 
-    driver = models.ForeignKey(User, related_name='driver_rides', null=True, on_delete=models.SET_NULL)
+    driver = models.ForeignKey(User, related_name='driver_rides', null=True, blank=True, on_delete=models.SET_NULL)
     passenger = models.ForeignKey(User, related_name='passenger_rides', null=True, blank=True, on_delete=models.SET_NULL)
     origin = models.CharField(max_length=255, null=True)
     destination = models.CharField(max_length=255, null=True)
