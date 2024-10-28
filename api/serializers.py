@@ -55,7 +55,7 @@ class RideSerializer(serializers.ModelSerializer):
     driver = serializers.SlugRelatedField(
         queryset=User.objects.filter(is_driver=True),  # Only users who are drivers
         slug_field='username',
-        allow_null=True,  # Allow passenger to be null
+        allow_null=True,
         required=False
     )
 
@@ -63,7 +63,8 @@ class RideSerializer(serializers.ModelSerializer):
     passenger = serializers.SlugRelatedField(
         queryset=User.objects.filter(is_driver=False),  # Only users who are not drivers
         slug_field='username',
-        required=True
+        allow_null=True,
+        required=False
     )
 
     class Meta:
